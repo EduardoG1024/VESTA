@@ -2,7 +2,12 @@ import 'dotenv/config';
 import express from 'express';
 import multer from 'multer';
 import { rateLimit } from 'express-rate-limit'
+import session from 'express-session';
 import path from 'path';
+import fs from 'fs';
+
+// IMPORTAR FUNCIONES
+import { onlyImagesVesta } from './onlyImages.js';
 
 // RATE LIMIT EXPRESS
 const limiter = rateLimit({
@@ -30,8 +35,12 @@ const storage = multer.diskStorage({
         cb(null, 'uploads');
     },
     filename: (req, file, cb) => {
-        let titleLabel = req.body.titleVesta;
-        cb(null, titleLabel + ' - ' + file.originalname);
+        if (onlyImagesVesta(file.mimetype) == 'okay') {
+            let titleLabel = req.body.titleVesta;
+            cb(null, titleLabel + ' - ' + file.originalname);
+        } else {
+            cb(new Error('Solo se permiten Imagenes'), null);
+        }
     }
 });
 const upload = multer({storage: storage});
@@ -41,12 +50,18 @@ app.get('/', (req, res) => {
     res.send('principal vesta');
 });
 
-// PAGINA GALERIA (DISPLAY DE SUBIDOS)
-app.get('/galeria', (req, res) => {
-    res.send('galeria');
+// PAGINA GALERIA (DISPLAY DE SUBIDOS EN JSON)
+// LECTURA DEL DIRECTORIO DE UPLOADS (IMAGENES)
+app.get('/galeriaVesta', (req, res) => {
+    fs.readdir('./uploads', (err, files) => {
+        if (err) {
+            res.status(500).json({error: 'Algo salio mal Intenta de Nuevo'});
+        }
+    res.json(files);
+    })
 });
 
-// PAGINA FORMULARIO (FORMULARIO DE SUBIR ARCHIVOS)
+// ENDPOINT PARA RECIBIR FORMULARIO (SOLO IMAGENES)
 app.post('/formularioVesta', limiter, upload.single('imageVesta'), (req, res, next) => {
     console.log(req.file);
     console.log(req.body);
