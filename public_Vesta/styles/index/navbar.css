@@ -1,0 +1,44 @@
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    height: fit-content;
+    margin: 10px 0 10px 0;
+}
+nav h1{
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    margin-left: 10px;
+    color: #E4E5E7;
+}
+.container-icons-actions{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 20px;
+    width: fit-content;
+    height: fit-content;
+    margin-right: 10px;
+}
+#singUp, #upload{
+    font-family: 'Comic Neue', cursive;
+    color: #E4E5E7;
+    background: #262731;
+    width: 100px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#singUp:hover{
+    box-shadow: 0 0 10px #4E586E;
+}
+#upload{
+    background: #A26961;
+}
+#upload:hover{
+    box-shadow: 0 0 10px #A26961;
+}

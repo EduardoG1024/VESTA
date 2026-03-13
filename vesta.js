@@ -27,7 +27,9 @@ const app = express();
 const __dirname = import.meta.dirname;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'assets/icons')));
 app.use(express.static(path.join(__dirname, 'public_Vesta')));
+app.use(express.static(path.join(__dirname, 'uploads')))
 
 // MULTER CONFIGURACION
 const storage = multer.diskStorage({
@@ -52,13 +54,16 @@ app.get('/', (req, res) => {
 
 // PAGINA GALERIA (DISPLAY DE SUBIDOS EN JSON)
 // LECTURA DEL DIRECTORIO DE UPLOADS (IMAGENES)
+// PAGINACION DE ARCHIVOS
 app.get('/galeriaVesta', (req, res) => {
+    let limiteImagenes = 25;
     fs.readdir('./uploads', (err, files) => {
         if (err) {
-            res.status(500).json({error: 'Algo salio mal Intenta de Nuevo'});
+            return res.status(500).json({error: 'Algo salio mal Intenta de Nuevo'});
         }
-    res.json(files);
-    })
+    let newFiles = files.slice(0, limiteImagenes);
+    res.json(newFiles);
+    });
 });
 
 // ENDPOINT PARA RECIBIR FORMULARIO (SOLO IMAGENES)
