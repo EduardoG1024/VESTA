@@ -1,0 +1,74 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    background: #0E0F1A;
+}
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    height: fit-content;
+}
+nav h1{
+    color: #B7B9FF;
+    font-family: 'Comic Neue', cursive;
+    margin: 10px 0 10px 10px;
+}
+/*FORMULARIO DE ARCHIVOS*/
+form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    width: 400px;
+    height: 400px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    background: #2A2D55;
+}
+form label{
+    color: #B7B9FF;
+    font-family: 'Comic Neue', cursive;
+}
+#titleVesta{
+    background: #0E0F1A;
+    border: none;
+    border-radius: 5px;
+    color: #B7B9FF;
+    font-family: 'Comic Neue', cursive;
+    width: 200px;
+    height: 30px;
+}
+#imageVesta{
+    display: none;
+}
+.submitBtn{
+    color: #B7B9FF;
+    font-family: 'Comic Neue', cursive;
+    background: #0E0F1A;
+    border: none;
+    border-radius: 5px;
+    width: 150px;
+    height: 30px;
+    cursor: pointer;
+}
+.secondLabel{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 80px;
+    border: #B7B9FF dashed 2px;
+    border-radius: 5px;
+}
