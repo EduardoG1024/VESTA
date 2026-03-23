@@ -8,6 +8,7 @@ import fs from 'fs';
 
 // IMPORTAR FUNCIONES
 import { onlyImagesVesta } from './onlyImages.js';
+import { error } from 'console';
 
 // RATE LIMIT EXPRESS
 const limiter = rateLimit({
@@ -27,7 +28,7 @@ const app = express();
 const __dirname = import.meta.dirname;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'assets/icons')));
+app.use(express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname, 'public_Vesta')));
 app.use(express.static(path.join(__dirname, 'uploads')))
 
@@ -37,15 +38,18 @@ const storage = multer.diskStorage({
         cb(null, 'uploads');
     },
     filename: (req, file, cb) => {
-        if (onlyImagesVesta(file.mimetype) == 'okay') {
-            let titleLabel = req.body.titleVesta;
-            cb(null, titleLabel + ' - ' + file.originalname);
-        } else {
-            cb(new Error('Solo se permiten Imagenes'), null);
-        }
+        let titleLabel = req.body.titleVesta || 'vesta34';
+        return cb(null, titleLabel + ' - ' + file.originalname);
     }
 });
-const upload = multer({storage: storage});
+const upload = multer({storage,
+    fileFilter: (req, file, cb) => {
+        if (onlyImagesVesta(file.mimetype) == 'okay') {
+            return cb(null, true);
+        }
+        return cb(new Error('Archivo no Valido'), false)
+    }
+});
 
 // PAGINA PRINCIPAL (REGISTRO O INICIO DE SESION)
 app.get('/', (req, res) => {
@@ -67,11 +71,39 @@ app.get('/galeriaVesta', (req, res) => {
 });
 
 // ENDPOINT PARA RECIBIR FORMULARIO (SOLO IMAGENES)
-app.post('/formularioVesta', limiter, upload.single('imageVesta'), (req, res, next) => {
-    console.log(req.file);
-    console.log(req.body);
-    res.status(202).send('Tu imagen se ha Guardado con Exito');
-    next();
+app.post('/formularioVesta', limiter, (req, res) => {upload.single('imageVesta')(req, res, (err) => {
+
+        if (err) {
+            console.error(err);
+
+            if (err.message === 'INVALID_FILE_TYPE') {
+                return res.status(400).json({
+                    error: 'Solo se permiten imágenes'
+                });
+            }
+
+            return res.status(500).json({
+                error: 'Error al subir el archivo'
+            });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({
+                error: 'No se subió ningún archivo'
+            });
+        }
+
+        // opcional: sanitizar body
+        const title = req.body.titleVesta || 'sin-titulo';
+
+        console.log(req.file);
+        console.log(req.body);
+
+        return res.status(201).json({
+            message: 'Imagen subida correctamente',
+            file: req.file.filename
+        });
+    });
 });
 
 // ENCENDIDO DEL SERVIDOR

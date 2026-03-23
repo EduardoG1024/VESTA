@@ -7,11 +7,21 @@ nav{
     height: fit-content;
     margin: 10px 0 10px 0;
 }
-nav h1{
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 300;
+.container-title{
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex-direction: row;
+    gap: 5px;
+}
+.container-title h1{
+    font-family: 'Comic Neue', cursive;
     margin-left: 10px;
-    color: #E4E5E7;
+    color: #B7B9FF;
+}
+.container-title p{
+    font-family: 'Comic Neue', cursive;
+    color: #D3D4FF;
 }
 .container-icons-actions{
     display: flex;
@@ -33,12 +43,9 @@ nav h1{
     border-radius: 5px;
     cursor: pointer;
 }
-#singUp:hover{
-    box-shadow: 0 0 10px #4E586E;
+#singUp{
+    border: #9FA0C3 solid 2px;
 }
 #upload{
-    background: #A26961;
-}
-#upload:hover{
-    box-shadow: 0 0 10px #A26961;
+    background: #9FA0C3;
 }

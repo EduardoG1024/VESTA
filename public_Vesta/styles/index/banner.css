@@ -1,21 +1,12 @@
-.section-rectangles-hero-banner{
+.section-hero-banner{
     position: relative;
-    display: grid;
+    display: flex;
     align-items: center;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    width: 600px;
+    justify-content: center;
+    width: 100%;
     height: fit-content;
 }
-.rectangle-uno, .rectangle-dos, .rectangle-tres{
-    width: 90%;
-    height: 250px;
-    background: #262731;
-    border-radius: 5px;
-}
-.rectangle-dos{
-    height: 600px;
-}
-.rectangle-tres{
-    height: 450px;
+.hero-banner-character{
+    width: 500px;
+    height: fit-content;
 }

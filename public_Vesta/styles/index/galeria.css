@@ -1,0 +1,12 @@
+.container-galeria-vesta{
+    display: grid;
+    grid-template-columns: repeat(5, 250px);
+    gap: 10px;
+    width: fit-content;
+    height: fit-content;
+}
+.imageGalery{
+    width: 100%;
+    height: fit-content;
+    border-radius: 4px;
+}

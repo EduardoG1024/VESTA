@@ -4,10 +4,11 @@ async function galeriaVesta() {
     fetch('/galeriaVesta')
     .then(res => res.json())
     .then(res => {
-        res.forEach(image => {
+        let newRes = res.slice(0, 15);
+        newRes.forEach(image => {
             const picture = document.createElement('img');
             picture.src = image;
-            picture.style.width = '200px';
+            picture.className = 'imageGalery';
             containerGaleriaVesta.appendChild(picture);
         })
     })

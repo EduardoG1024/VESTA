@@ -1,0 +1,13 @@
+footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    height: fit-content;
+}
+footer p{
+    font-family: 'Comic Neue', cursive;
+    color: #B7B9FF;
+}
