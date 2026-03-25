@@ -93,12 +93,6 @@ app.post('/formularioVesta', limiter, (req, res) => {upload.single('imageVesta')
             });
         }
 
-        // opcional: sanitizar body
-        const title = req.body.titleVesta || 'sin-titulo';
-
-        console.log(req.file);
-        console.log(req.body);
-
         return res.status(201).json({
             message: 'Imagen subida correctamente',
             file: req.file.filename

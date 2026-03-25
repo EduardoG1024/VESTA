@@ -6,6 +6,7 @@ async function galeriaVesta() {
     .then(res => {
         let newRes = res.slice(0, 15);
         newRes.forEach(image => {
+            // CONTENEDOR DE IMAGENES
             const picture = document.createElement('img');
             picture.src = image;
             picture.className = 'imageGalery';

@@ -18,10 +18,12 @@ nav{
     font-family: 'Comic Neue', cursive;
     margin-left: 10px;
     color: #B7B9FF;
+    font-size: 45px;
 }
 .container-title p{
     font-family: 'Comic Neue', cursive;
     color: #D3D4FF;
+    font-size: 25px;
 }
 .container-icons-actions{
     display: flex;
@@ -33,19 +35,19 @@ nav{
     height: fit-content;
     margin-right: 10px;
 }
-#singUp, #upload{
+#singUp{
     font-family: 'Comic Neue', cursive;
-    color: #E4E5E7;
-    background: #262731;
+    color: #D6D6E7;
+    background: #121117;
     width: 100px;
     height: 30px;
-    border: none;
-    border-radius: 5px;
+    border: #D6D6E7 solid 2px;
+    border-radius: 50px;
     cursor: pointer;
 }
-#singUp{
-    border: #9FA0C3 solid 2px;
-}
-#upload{
-    background: #9FA0C3;
+.user-icon{
+    border: none;
+    border-radius: 50px;
+    width: 40px;
+    cursor: pointer;
 }
