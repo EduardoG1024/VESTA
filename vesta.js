@@ -6,17 +6,17 @@ import session from 'express-session';
 import path from 'path';
 import fs from 'fs';
 
-// IMPORTAR FUNCIONES
+// IMPORTAR FUNCIONES EXTERNAS (EDITABLES)
 import { onlyImagesVesta } from './onlyImages.js';
 import { error } from 'console';
 
-// RATE LIMIT EXPRESS
+// RATE LIMIT  PARA EXPRESS
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 5,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
-    ipv6Subnet: 56,
+    //ipv6Subnet: 56,
     message: 'Ya no puedes subir mas Archivos PAPU espera 15 minutos'
 });
 
@@ -54,6 +54,13 @@ const upload = multer({storage,
 // PAGINA PRINCIPAL (REGISTRO O INICIO DE SESION)
 app.get('/', (req, res) => {
     res.send('principal vesta');
+});
+
+// ENDPOINT PARA RECIBIR DATOS DEL LOGIN
+app.post('/loginVesta', limiter, (req, res, next) => {
+    res.send('Usuario Creado');
+    console.log(req.body);
+    next();
 });
 
 // PAGINA GALERIA (DISPLAY DE SUBIDOS EN JSON)

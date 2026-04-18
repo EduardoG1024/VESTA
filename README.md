@@ -28,8 +28,9 @@
 ## CAN I HAVE MY OWN PRIVATE VESTA SERVER?
 - YES!!! you can have your own private VESTA by following the next steps.
 - NOTE: this will be an app installed with Ubuntu Server, if you are using Windows or MAC the installation can be a little different.
+- You can follow the next steps to install your own **Private Home Cloud (VESTA)**
 
-## INSTALLING VESTA ON UBUNTU SERVER (LOCAL / HOME)
+## INSTALLATION VESTA ON UBUNTU SERVER (LOCAL / HOME)
 - Install dependences:
     
 ``` bash
@@ -39,4 +40,7 @@
     npm i express-session
     npm i dotenv
     npm i @supabase/supabase-js (OPTIONAL, SUPABASE IS USED FOR REGISTER USERS)
+    npm i pm2 -g
 ```
+
+- 
