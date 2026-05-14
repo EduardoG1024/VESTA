@@ -31,16 +31,9 @@
 - You can follow the next steps to install your own **Private Home Cloud (VESTA)**
 
 ## INSTALLATION VESTA ON UBUNTU SERVER (LOCAL / HOME)
-- Install dependences:
+- Install Dependences With **package.json**:
     
 ``` bash
-    npm i express
-    npm i multer
-    npm i express-rate-limit
-    npm i express-session
-    npm i dotenv
-    npm i @supabase/supabase-js (OPTIONAL, SUPABASE IS USED FOR REGISTER USERS)
+    npm install
     npm i pm2 -g
 ```
-
-- 

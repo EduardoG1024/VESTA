@@ -1,3 +1,4 @@
+// ! MODULO CENTRAL VESTA
 import 'dotenv/config';
 import express from 'express';
 import multer from 'multer';
@@ -7,30 +8,40 @@ import path from 'path';
 import fs from 'fs';
 
 // * IMPORTAR FUNCIONES EXTERNAS (EDITABLES)
-import { onlyImagesVesta } from './onlyImages.js';
-import { error } from 'console';
+import { onlyImagesVesta } from './vesta-modulos/onlyImages.js';
+import supabase from './vesta-modulos/vestabase.js';
 
-// * RATE LIMIT  PARA EXPRESS
+
+// * RATE LIMIT PARA RUTAS
+// ! LIMITAR PETICIONES DEL USUARIO PARA SUBIR IMAGENES
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 5,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
     //ipv6Subnet: 56,
-    message: 'Ya no puedes subir mas Archivos PAPU espera 15 minutos'
+    message: 'Tus Peticiones como Usuario se han Terminado, Intentalo mas Tarde' // ? EDITAR TEXTO
 });
 
 // * PUERTO Y EXPRESS
 const port = process.env.PORT;
 const app = express();
+
+// * SESSION PARA USUARIOS
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {secure: false},
+}));
  
 // * USO DE CARPETAS Y URL's
 const __dirname = import.meta.dirname;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'assets')));
-app.use(express.static(path.join(__dirname, 'public_Vesta')));
-app.use(express.static(path.join(__dirname, 'uploads')))
+// app.use(express.static(path.join(__dirname, 'assets')));
+// app.use(express.static(path.join(__dirname, 'public_Vesta')));
+// app.use(express.static(path.join(__dirname, 'uploads')))
 
 // * MULTER CONFIGURACION
 const storage = multer.diskStorage({
@@ -54,7 +65,13 @@ const upload = multer({storage,
 // * PAGINA PRINCIPAL (MAIN PAGE)
 // TODO: AÑADIR PAGINA PRINCIPAL FRONTEND
 app.get('/', (req, res) => {
-    res.send('VESTA main page');
+    if (req.session.views) {
+        req.session.views++;
+    } else {
+        req.session.views = 1;
+    }
+    res.send(`Views: ${req.session.views}`);
+    //res.send('VESTA main page');
 });
 
 // * RUTA DEL FORMULARIO DE REGISTRO
@@ -88,11 +105,16 @@ app.get('/galeriaVesta', (req, res) => {
     });
 });
 
+// * RUTA DEL FORMULARIO PARA SUBIR IMAGENES
+app.get('/subirImagenVesta', (req, res) => {
+
+});
+
 // * ENDPOINT PARA RECIBIR FORMULARIO CON IMAGENES
 // ! IMPORTANTE: SOLO RECIBIR IMAGENES, CREAR MIDDLEWARES PARA VALIDAR DATOS
 // TODO: MIDDLEWARES DE VERIFICACION
 // TODO: ENVIAR RUTAS DE ARCHIVOS A SUPABASE
-app.post('/subirImagenVesta', (req, res, next) => {
+app.post('/recibirImagenVesta', (req, res, next) => {
 
         
 });
