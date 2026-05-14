@@ -6,11 +6,11 @@ import session from 'express-session';
 import path from 'path';
 import fs from 'fs';
 
-// IMPORTAR FUNCIONES EXTERNAS (EDITABLES)
+// * IMPORTAR FUNCIONES EXTERNAS (EDITABLES)
 import { onlyImagesVesta } from './onlyImages.js';
 import { error } from 'console';
 
-// RATE LIMIT  PARA EXPRESS
+// * RATE LIMIT  PARA EXPRESS
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 5,
@@ -20,11 +20,11 @@ const limiter = rateLimit({
     message: 'Ya no puedes subir mas Archivos PAPU espera 15 minutos'
 });
 
-// PUERTO Y EXPRESS
+// * PUERTO Y EXPRESS
 const port = process.env.PORT;
 const app = express();
  
-// USO DE CARPETAS Y URL's
+// * USO DE CARPETAS Y URL's
 const __dirname = import.meta.dirname;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname, 'public_Vesta')));
 app.use(express.static(path.join(__dirname, 'uploads')))
 
-// MULTER CONFIGURACION
+// * MULTER CONFIGURACION
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads');
@@ -51,21 +51,32 @@ const upload = multer({storage,
     }
 });
 
-// PAGINA PRINCIPAL (REGISTRO O INICIO DE SESION)
+// * PAGINA PRINCIPAL (MAIN PAGE)
+// TODO: AÑADIR PAGINA PRINCIPAL FRONTEND
 app.get('/', (req, res) => {
-    res.send('principal vesta');
+    res.send('VESTA main page');
 });
 
-// ENDPOINT PARA RECIBIR DATOS DEL LOGIN
+// * RUTA DEL FORMULARIO DE REGISTRO
+// TODO: AÑADIR PAGINA DE FORMULARIO FRONTEND
+app.get('/registroVesta', (req, res) => {
+
+});
+
+// * ENDPOINT PARA RECIBIR DATOS DEL LOGIN
+// TODO: CREAR MIDDLEWARE CON:
+// ? 1. RECIBIR DATOS DE USUARIO
+// ? 2. VALIDAR LOS DATOS DEL USUARIO CON MIDDLEWARE
+// ? 3. ENVIAR DATOS VALIDADOS A AUTH SUPABASE
 app.post('/loginVesta', limiter, (req, res, next) => {
     res.send('Usuario Creado');
     console.log(req.body);
     next();
 });
 
-// PAGINA GALERIA (DISPLAY DE SUBIDOS EN JSON)
+// * ENDPOINT JSON DE LAS IMAGENES SUBIDAS (PUBLICO)
 // LECTURA DEL DIRECTORIO DE UPLOADS (IMAGENES)
-// PAGINACION DE ARCHIVOS
+// TODO: PAGINACION DE ARCHIVOS / RECUPERAR LINKS DE SUPABASE
 app.get('/galeriaVesta', (req, res) => {
     let limiteImagenes = 25;
     fs.readdir('./uploads', (err, files) => {
@@ -77,37 +88,16 @@ app.get('/galeriaVesta', (req, res) => {
     });
 });
 
-// ENDPOINT PARA RECIBIR FORMULARIO (SOLO IMAGENES)
-app.post('/formularioVesta', limiter, (req, res) => {upload.single('imageVesta')(req, res, (err) => {
+// * ENDPOINT PARA RECIBIR FORMULARIO CON IMAGENES
+// ! IMPORTANTE: SOLO RECIBIR IMAGENES, CREAR MIDDLEWARES PARA VALIDAR DATOS
+// TODO: MIDDLEWARES DE VERIFICACION
+// TODO: ENVIAR RUTAS DE ARCHIVOS A SUPABASE
+app.post('/subirImagenVesta', (req, res, next) => {
 
-        if (err) {
-            console.error(err);
-
-            if (err.message === 'INVALID_FILE_TYPE') {
-                return res.status(400).json({
-                    error: 'Solo se permiten imágenes'
-                });
-            }
-
-            return res.status(500).json({
-                error: 'Error al subir el archivo'
-            });
-        }
-
-        if (!req.file) {
-            return res.status(400).json({
-                error: 'No se subió ningún archivo'
-            });
-        }
-
-        return res.status(201).json({
-            message: 'Imagen subida correctamente',
-            file: req.file.filename
-        });
-    });
+        
 });
 
-// ENCENDIDO DEL SERVIDOR
+// * ENCENDIDO DEL SERVIDOR
 app.listen(port, () => {
     console.log(`Servidor Vesta Escuchando en el Puerto: ${port}`);
 });
