@@ -9,7 +9,7 @@ import fs from 'fs';
 
 // * IMPORTAR FUNCIONES EXTERNAS (EDITABLES)
 import { onlyImagesVesta } from './vesta-modulos/onlyImages.js';
-import supabase from './vesta-modulos/vestabase.js';
+import { supabase } from './vesta-modulos/vestabase.js';
 
 
 // * RATE LIMIT PARA RUTAS
@@ -105,7 +105,7 @@ app.get('/galeriaVesta', (req, res) => {
     });
 });
 
-// * RUTA DEL FORMULARIO PARA SUBIR IMAGENES
+// * RUTA DEL FORMULARIO PARA SUBIR IMAGENES FRONTEND
 app.get('/subirImagenVesta', (req, res) => {
 
 });
