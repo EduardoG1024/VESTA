@@ -1,74 +1,114 @@
-*{
+/* ===== RESET ===== */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: "Fredoka", sans-serif;
 }
-body{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    width: 100%;
-    height: fit-content;
+
+/* ===== BODY ===== */
+body {
     background: #0E0F1A;
-}
-nav{
+    color: #CFD0FF;
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
+}
+
+/* ===== NAV ===== */
+nav {
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
     justify-content: space-between;
-    flex-direction: row;
-    width: 100%;
-    height: fit-content;
-}
-nav h1{
-    color: #B7B9FF;
-    font-family: 'Comic Neue', cursive;
-    margin: 10px 0 10px 10px;
-}
-/*FORMULARIO DE ARCHIVOS*/
-form{
-    display: flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 10px;
-    width: 400px;
-    height: 400px;
-    border: 1px solid #fff;
-    border-radius: 5px;
-    background: #2A2D55;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(183, 185, 255, 0.15);
 }
-form label{
+
+nav h1 {
     color: #B7B9FF;
-    font-family: 'Comic Neue', cursive;
+    letter-spacing: 3px;
+    font-size: 24px;
 }
-#titleVesta{
-    background: #0E0F1A;
-    border: none;
-    border-radius: 5px;
-    color: #B7B9FF;
-    font-family: 'Comic Neue', cursive;
-    width: 200px;
-    height: 30px;
+
+/* ===== FORM CARD ===== */
+form {
+    margin-top: 60px;
+    width: 380px;
+    padding: 30px;
+    background: linear-gradient(145deg, #14162A, #0C0D18);
+    border: 1px solid rgba(183, 185, 255, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
 }
-#imageVesta{
+
+/* ===== LABELS ===== */
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    color: #CFD0FF;
+    font-size: 14px;
+}
+
+/* ===== INPUTS ===== */
+input[type="text"],
+input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(183, 185, 255, 0.2);
+    background: rgba(255, 255, 255, 0.03);
+    color: #CFD0FF;
+    outline: none;
+    transition: 0.2s;
+}
+
+input[type="text"]:focus {
+    border-color: #B7B9FF;
+    box-shadow: 0 0 10px rgba(183, 185, 255, 0.3);
+}
+
+/* ===== FILE INPUT CUSTOM ===== */
+.secondLabel {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px dashed rgba(183, 185, 255, 0.4);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.secondLabel:hover {
+    background: rgba(183, 185, 255, 0.1);
+}
+
+/* ocultar input file real */
+input[type="file"] {
     display: none;
 }
-.submitBtn{
-    color: #B7B9FF;
-    font-family: 'Comic Neue', cursive;
-    background: #0E0F1A;
+
+/* ===== BUTTON ===== */
+.submitBtn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
     border: none;
-    border-radius: 5px;
-    width: 150px;
-    height: 30px;
+    border-radius: 10px;
+    background: #B7B9FF;
+    color: #0E0F1A;
+    font-weight: bold;
     cursor: pointer;
+    transition: 0.2s;
 }
-.secondLabel{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80%;
-    height: 80px;
-    border: #B7B9FF dashed 2px;
-    border-radius: 5px;
+
+.submitBtn:hover {
+    background: #CFD0FF;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(183, 185, 255, 0.2);
 }

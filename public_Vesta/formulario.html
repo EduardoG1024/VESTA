@@ -14,11 +14,13 @@
         <h1>VESTA</h1>
         <img src="" alt="characterVesta">
     </nav>
-    <form method="post" action="/formularioVesta" enctype="multipart/form-data">
-        <label for="titleVesta">Titulo de la imagen: </label>
-        <input type="text" name="titleVesta" id="titleVesta" required>
-        <label for="imageVesta" class="secondLabel">Selecciona una Imagen</label>
-        <input type="file" name="imageVesta" id="imageVesta" required>
+    <form method="post" action="/recibirImagenVesta" enctype="multipart/form-data">
+        <label for="usuario">Usuario: </label>
+        <input type="text" name="VestaUsuario" id="VestaUsuario">
+        <label for="VestaTitle">Titulo de la imagen: </label>
+        <input type="text" name="VestaTitle" id="VestaTitle" required>
+        <label for="VestaImage" class="secondLabel">Selecciona una Imagen</label>
+        <input type="file" name="VestaImage" id="VestaImage" required>
         <button type="submit" class="submitBtn">enviar</button>
     </form>
 </body>

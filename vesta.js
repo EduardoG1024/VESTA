@@ -39,9 +39,9 @@ app.use(session({
 const __dirname = import.meta.dirname;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(express.static(path.join(__dirname, 'assets')));
-// app.use(express.static(path.join(__dirname, 'public_Vesta')));
-// app.use(express.static(path.join(__dirname, 'uploads')))
+app.use(express.static(path.join(__dirname, 'assets')));
+app.use(express.static(path.join(__dirname, 'public_Vesta')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 // * MULTER CONFIGURACION
 const storage = multer.diskStorage({
@@ -49,8 +49,8 @@ const storage = multer.diskStorage({
         cb(null, 'uploads');
     },
     filename: (req, file, cb) => {
-        let titleLabel = req.body.titleVesta || 'vesta34';
-        return cb(null, titleLabel + ' - ' + file.originalname);
+        const VestaTitle = 'Vesta';
+        return cb(null, VestaTitle + '-' + file.originalname);
     }
 });
 const upload = multer({storage,
@@ -94,14 +94,17 @@ app.post('/loginVesta', limiter, (req, res, next) => {
 // * ENDPOINT JSON DE LAS IMAGENES SUBIDAS (PUBLICO)
 // LECTURA DEL DIRECTORIO DE UPLOADS (IMAGENES)
 // TODO: PAGINACION DE ARCHIVOS / RECUPERAR LINKS DE SUPABASE
-app.get('/galeriaVesta', (req, res) => {
-    let limiteImagenes = 25;
+app.get('/galeriaVesta/:name', (req, res) => {
+    const nameImage = req.params.name;
+    // console.log(nameImage);
+
     fs.readdir('./uploads', (err, files) => {
         if (err) {
             return res.status(500).json({error: 'Algo salio mal Intenta de Nuevo'});
         }
-    let newFiles = files.slice(0, limiteImagenes);
-    res.json(newFiles);
+    let newFiles = files;
+    let image = newFiles.find(file => file == nameImage);
+    res.json(image);
     });
 });
 
@@ -114,9 +117,26 @@ app.get('/subirImagenVesta', (req, res) => {
 // ! IMPORTANTE: SOLO RECIBIR IMAGENES, CREAR MIDDLEWARES PARA VALIDAR DATOS
 // TODO: MIDDLEWARES DE VERIFICACION
 // TODO: ENVIAR RUTAS DE ARCHIVOS A SUPABASE
-app.post('/recibirImagenVesta', (req, res, next) => {
+app.post('/recibirImagenVesta', upload.single('VestaImage'), async (req, res, next) => {
+    
+    // DEFINIR DATOS
+    const usuario = req.body.VestaUsuario;
+    const titulo = req.body.VestaTitle;
+    const ruta = req.file.filename;
+    const fecha = new Date().toISOString().split('T')[0];
 
-        
+    const { error } = await supabase
+    .from('VESTA_DB_LINKS')
+    .insert({
+        link_user: usuario,
+        link_title: titulo,
+        link_stored: ruta,
+        link_date: fecha
+    });
+    if (error) return res.status(400).send('Lo Sentimos, No se Pudo Guardar tu Imagen, Intentalo de Nuevo');
+    const urlImagen = `http://localhost:3000/${ruta}`
+    res.status(200).send(`Tu Imagen ha Sido Guardada, Visita: ${urlImagen}`);
+    next();
 });
 
 // * ENCENDIDO DEL SERVIDOR
