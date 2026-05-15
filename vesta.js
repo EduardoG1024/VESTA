@@ -94,18 +94,29 @@ app.post('/loginVesta', limiter, (req, res, next) => {
 // * ENDPOINT JSON DE LAS IMAGENES SUBIDAS (PUBLICO)
 // LECTURA DEL DIRECTORIO DE UPLOADS (IMAGENES)
 // TODO: PAGINACION DE ARCHIVOS / RECUPERAR LINKS DE SUPABASE
-app.get('/galeriaVesta/:name', (req, res) => {
-    const nameImage = req.params.name;
-    // console.log(nameImage);
+app.get('/galeriaVesta/:id', async (req, res) => {
+    const page = parseInt(req.params.id) || 1; // PAGINA
+    const limit = 10;             // LIMITE
 
-    fs.readdir('./uploads', (err, files) => {
-        if (err) {
-            return res.status(500).json({error: 'Algo salio mal Intenta de Nuevo'});
-        }
-    let newFiles = files;
-    let image = newFiles.find(file => file == nameImage);
-    res.json(image);
-    });
+    const from = (page - 1) * 10;
+    const to = from + limit - 1;
+    // console.log(nameImage);
+    const { data, error } = await supabase
+    .from('VESTA_DB_LINKS')
+    .select('id, link_user, link_title, link_stored, link_date')
+    .range(from, to)
+    .order('id', {ascending: false})
+    // console.log(data);
+    res.json(data);
+
+    // fs.readdir('./uploads', (err, files) => {
+    //     if (err) {
+    //         return res.status(500).json({error: 'Algo Salio mal Intenta de Nuevo'});
+    //     }
+    // let newFiles = files;
+    // let image = newFiles.find(file => file == nameImage);
+    // res.json(image);
+    // });
 });
 
 // * RUTA DEL FORMULARIO PARA SUBIR IMAGENES FRONTEND
@@ -124,6 +135,8 @@ app.post('/recibirImagenVesta', upload.single('VestaImage'), async (req, res, ne
     const titulo = req.body.VestaTitle;
     const ruta = req.file.filename;
     const fecha = new Date().toISOString().split('T')[0];
+
+    if (!usuario || !titulo || !req.file) return res.send('Debes Llenar Todos los Campos Solicitados');
 
     const { error } = await supabase
     .from('VESTA_DB_LINKS')
