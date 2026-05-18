@@ -2,18 +2,19 @@
 import 'dotenv/config';
 import express from 'express';
 import multer from 'multer';
-import { rateLimit } from 'express-rate-limit'
+import { rateLimit } from 'express-rate-limit';
 import session from 'express-session';
 import path from 'path';
 import fs from 'fs';
 
 // * IMPORTAR FUNCIONES EXTERNAS (EDITABLES)
-import { onlyImagesVesta } from './vesta-modulos/onlyImages.js';
+import { onlyImagesVideosVesta } from './vesta-modulos/onlyImages.js';
 import { supabase } from './vesta-modulos/vestabase.js';
 
 
 // * RATE LIMIT PARA RUTAS
 // ! LIMITAR PETICIONES DEL USUARIO PARA SUBIR IMAGENES
+app.set('trust proxy', 1);  // ? CLOUDFLARE TUNNEL
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 5,
@@ -55,10 +56,10 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage,
     fileFilter: (req, file, cb) => {
-        if (onlyImagesVesta(file.mimetype) == 'okay') {
+        if (onlyImagesVideosVesta(file.mimetype)) {
             return cb(null, true);
         }
-        return cb(new Error('Archivo no Valido'), false)
+        return cb(new Error({message: 'ERROR'}), false)
     }
 });
 
@@ -128,7 +129,7 @@ app.get('/subirImagenVesta', (req, res) => {
 // ! IMPORTANTE: SOLO RECIBIR IMAGENES, CREAR MIDDLEWARES PARA VALIDAR DATOS
 // TODO: MIDDLEWARES DE VERIFICACION
 // TODO: ENVIAR RUTAS DE ARCHIVOS A SUPABASE
-app.post('/recibirImagenVesta', upload.single('VestaImage'), async (req, res, next) => {
+app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req, res, next) => {
     
     // DEFINIR DATOS
     const usuario = req.body.VestaUsuario;
@@ -144,9 +145,9 @@ app.post('/recibirImagenVesta', upload.single('VestaImage'), async (req, res, ne
         link_user: usuario,
         link_title: titulo,
         link_stored: ruta,
-        link_date: fecha
+        link_date: fecha,
     });
-    if (error) return res.status(400).send('Lo Sentimos, No se Pudo Guardar tu Imagen, Intentalo de Nuevo');
+    if (error) return res.status(500).send('Lo Sentimos, No se Pudo Guardar tu Imagen, Intentalo de Nuevo');
     const urlImagen = `http://localhost:3000/${ruta}`
     res.status(200).send(`Tu Imagen ha Sido Guardada, Visita: ${urlImagen}`);
     next();
