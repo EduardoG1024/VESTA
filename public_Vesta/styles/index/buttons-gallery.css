@@ -1,0 +1,14 @@
+.container-buttons-pagination{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 400px;
+    width: 100%;
+    height: fit-content;
+    gap: 10px;
+}
+.container-buttons-pagination button{
+    font-family: 'Comic Neue', cursive;
+    border: none;
+    border-radius: 3px;
+    width: 100%;
+}

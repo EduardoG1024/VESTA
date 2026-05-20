@@ -14,7 +14,7 @@ import { supabase } from './vesta-modulos/vestabase.js';
 
 // * RATE LIMIT PARA RUTAS
 // ! LIMITAR PETICIONES DEL USUARIO PARA SUBIR IMAGENES
-app.set('trust proxy', 1);  // ? CLOUDFLARE TUNNEL
+// app.set('trust proxy', 1);  // ? CLOUDFLARE TUNNEL
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 5,
@@ -97,7 +97,7 @@ app.post('/loginVesta', limiter, (req, res, next) => {
 // TODO: PAGINACION DE ARCHIVOS / RECUPERAR LINKS DE SUPABASE
 app.get('/galeriaVesta/:id', async (req, res) => {
     const page = parseInt(req.params.id) || 1; // PAGINA
-    const limit = 10;             // LIMITE
+    const limit = 12;             // LIMITE
 
     const from = (page - 1) * 10;
     const to = from + limit - 1;
@@ -105,19 +105,11 @@ app.get('/galeriaVesta/:id', async (req, res) => {
     const { data, error } = await supabase
     .from('VESTA_DB_LINKS')
     .select('id, link_user, link_title, link_stored, link_date')
-    .range(from, to)
+    // .gt('id', 31) 
     .order('id', {ascending: false})
-    // console.log(data);
-    res.json(data);
+    .range(from, to)
 
-    // fs.readdir('./uploads', (err, files) => {
-    //     if (err) {
-    //         return res.status(500).json({error: 'Algo Salio mal Intenta de Nuevo'});
-    //     }
-    // let newFiles = files;
-    // let image = newFiles.find(file => file == nameImage);
-    // res.json(image);
-    // });
+    res.json(data);
 });
 
 // * RUTA DEL FORMULARIO PARA SUBIR IMAGENES FRONTEND
@@ -148,7 +140,7 @@ app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req
         link_date: fecha,
     });
     if (error) return res.status(500).send('Lo Sentimos, No se Pudo Guardar tu Imagen, Intentalo de Nuevo');
-    const urlImagen = `http://localhost:3000/${ruta}`
+    const urlImagen = `http://localhost:3001/${ruta}`
     res.status(200).send(`Tu Imagen ha Sido Guardada, Visita: ${urlImagen}`);
     next();
 });

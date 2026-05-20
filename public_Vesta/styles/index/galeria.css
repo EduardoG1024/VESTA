@@ -1,11 +1,12 @@
 .container-galeria-vesta{
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
     gap: 10px;
-    max-width: 90%;
+    max-width: 1024px;
     width: 100%;
     height: fit-content;
-    gap: 10px;
+    gap: 5px;
 }
 .image-container-galery{
     display: flex;
@@ -14,7 +15,7 @@
     flex-direction: column;
     width: 100%;
     height: fit-content;
-    gap: 10px;
+    gap: 5px;
 }
 .imageGalery{
     width: 100%;
