@@ -1,20 +1,19 @@
 # VESTA
 - What is **VESTA**?
-    - VESTA is a web application where you and others can upload images and videos to create a gallery.
-    - VESTA will have a simple UI(User Interface) for a better UX(User Experience).
-- PAGES OF VESTAS
-    - VESTA includes some pages like: home/index, saved images, upload images, registrate user, options
-    - Those are some pages that VESTA is including for now
-    - VESTA **HOME**
-    - VESTA home or index is the first page where the user will see if he goes to the website.
-    - VESTA **SAVED**
-    - VESTA saved is a section where the user can see all the images or video that he saved before.
-    - VESTA **UPLOADS**
-    - VESTA uploads is a form where the user can select a photo or video from its device and then upload it.
-    - VESTA **LOG-IN**
-    - VESTA log-in is the page where the user can create an account to have more options in the **VESTA** app.
-    - VESTA **OPTIONS**
-    - VESTA options are the tools to modify the **VESTA** app like: theme color, font, profile picture, etc. 
+    - VESTA is a web application where you and others can upload images and videos to create a gallery. This app is for artist or people that wants inspiration for their art.
+    - VESTA has a simple UI(User Interface) for a better UX(User Experience).
+    - Why use VESTA insteat other applications?
+    - VESTA is an application that simplifies all the interface showing you less things.
+    - Also this application has events for their users.
+
+## WHY VESTA?
+- VESTA is not going to compete with other applications like **Pinterest**, **DeviantArt**, **Patreon**, etc. VESTA is an alternative to this applications, VESTA is an application that wants to create an artist community sharing draws, renders, animations, etc.
+
+
+## DESIGN
+- User Interface of VESTA
+
+![Main Page VESTA](/assets/design/VESTA%20Pages.png)
 
 ## TECHNICAL DOCUMENTATION
 - VESTA is a web application developed with:
@@ -22,18 +21,13 @@
     - HTML / CSS / JavaScript
     - **BackEnd**
     - NodeJs / Express / Multer / Express-Session / Express-Rate-Limit
+    - **Database**
+    - Supabase(PostgreSQL)
     - **Hosting**
-    - Ubuntu Server / PM2
+    - Ubuntu Server / PM2 / Cloudflare Tunnel
 
-## CAN I HAVE MY OWN PRIVATE VESTA SERVER?
-- YES!!! you can have your own private VESTA by following the next steps.
-- NOTE: this will be an app installed with Ubuntu Server, if you are using Windows or MAC the installation can be a little different.
-- You can follow the next steps to install your own **Private Home Cloud (VESTA)**
+- VESTA Arquitecture
 
-## INSTALLATION VESTA ON UBUNTU SERVER (LOCAL / HOME)
-- Install Dependences With **package.json**:
-    
-``` bash
-    npm install
-    npm i pm2 -g
-```
+![Diagram Logic](/assets/design/Diagram.png)
+
+
