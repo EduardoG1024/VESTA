@@ -13,7 +13,7 @@
 ## DESIGN
 - User Interface of VESTA
 
-![Main Page VESTA](/assets/design/VESTA%20Pages.png)
+![Main Page VESTA](/design/VESTA%20Pages.png)
 
 ## TECHNICAL DOCUMENTATION
 - VESTA is a web application developed with:
@@ -28,6 +28,6 @@
 
 - VESTA Arquitecture
 
-![Diagram Logic](/assets/design/Diagram.png)
+![Diagram Logic](/design/Diagram.png)
 
 
