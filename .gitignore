@@ -1,8 +1,9 @@
 #ENV
 .env
 
-#UPLOADS
+#UPLOADS & POSTERS
 uploads/
+posters/
 
 #MODULES
 node_modules/

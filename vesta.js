@@ -2,7 +2,6 @@
 import 'dotenv/config';
 import express from 'express';
 import multer from 'multer';
-import { rateLimit } from 'express-rate-limit';
 import session from 'express-session';
 import path from 'path';
 import fs from 'fs';
@@ -10,19 +9,8 @@ import fs from 'fs';
 // * IMPORTAR FUNCIONES EXTERNAS (EDITABLES)
 import { onlyImagesVideosVesta } from './vesta-modulos/onlyImages.js';
 import { supabase } from './vesta-modulos/vestabase.js';
+import { limiter } from './vesta-modulos/vestaLimiter.js';
 
-
-// * RATE LIMIT PARA RUTAS
-// ! LIMITAR PETICIONES DEL USUARIO PARA SUBIR IMAGENES
-// app.set('trust proxy', 1);  // ? CLOUDFLARE TUNNEL
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    limit: 5,
-    standardHeaders: 'draft-8',
-    legacyHeaders: false,
-    //ipv6Subnet: 56,
-    message: 'Tus Peticiones como Usuario se han Terminado, Intentalo mas Tarde' // ? EDITAR TEXTO
-});
 
 // * PUERTO Y EXPRESS
 const port = process.env.PORT;
@@ -114,7 +102,7 @@ app.get('/galeriaVesta/:id', async (req, res) => {
 
 // * RUTA DEL FORMULARIO PARA SUBIR IMAGENES FRONTEND
 app.get('/subirImagenVesta', (req, res) => {
-
+    res.redirect('/formulario.html')
 });
 
 // * ENDPOINT PARA RECIBIR FORMULARIO CON IMAGENES
@@ -140,9 +128,19 @@ app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req
         link_date: fecha,
     });
     if (error) return res.status(500).send('Lo Sentimos, No se Pudo Guardar tu Imagen, Intentalo de Nuevo');
-    const urlImagen = `http://localhost:3001/${ruta}`
+    const urlImagen = `http://vesta.site/${ruta}`;
     res.status(200).send(`Tu Imagen ha Sido Guardada, Visita: ${urlImagen}`);
     next();
+});
+
+// ? ENDPOINT TEST
+app.get('/test', async (req, res) => {
+    const { data, error } = await supabase
+    .from('VESTA_DB_LINKS')
+    .select()
+    .eq('id', 5)
+    if(data[0].link_poster === null) return res.send('poster es null');
+    res.json(data);
 });
 
 // * ENCENDIDO DEL SERVIDOR
