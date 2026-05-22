@@ -7,9 +7,10 @@ import path from 'path';
 import fs from 'fs';
 
 // * IMPORTAR FUNCIONES EXTERNAS (EDITABLES)
-import { onlyImagesVideosVesta } from './vesta-modulos/onlyImages.js';
-import { supabase } from './vesta-modulos/vestabase.js';
-import { limiter } from './vesta-modulos/vestaLimiter.js';
+import { onlyImagesVideosVesta } from './src/vesta-modulos/onlyImages.js';
+import { supabase } from './src/vesta-modulos/vestabase.js';
+import { limiter } from './src/vesta-modulos/vestaLimiter.js';
+import { validateLoginVesta } from './src/endpoints-middlewares/vesta-login.js';
 
 
 // * PUERTO Y EXPRESS
@@ -26,8 +27,8 @@ app.use(session({
  
 // * USO DE CARPETAS Y URL's
 const __dirname = import.meta.dirname;
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname, 'public_Vesta')));
 app.use(express.static(path.join(__dirname, 'uploads')));
@@ -66,7 +67,7 @@ app.get('/', (req, res) => {
 // * RUTA DEL FORMULARIO DE REGISTRO
 // TODO: AÑADIR PAGINA DE FORMULARIO FRONTEND
 app.get('/registroVesta', (req, res) => {
-
+    
 });
 
 // * ENDPOINT PARA RECIBIR DATOS DEL LOGIN
@@ -75,9 +76,12 @@ app.get('/registroVesta', (req, res) => {
 // ? 2. VALIDAR LOS DATOS DEL USUARIO CON MIDDLEWARE
 // ? 3. ENVIAR DATOS VALIDADOS A AUTH SUPABASE
 app.post('/loginVesta', limiter, (req, res, next) => {
-    res.send('Usuario Creado');
-    console.log(req.body);
-    next();
+    // console.log(req.body);
+    const { email: correo, password: contraseña } = req.body;
+    if (!validateLoginVesta(correo, contraseña))
+        return res.status(400).send('Datos no Validados');
+    
+    return res.status(200).send('Datos Validados ya Puedes Utilizar todas las Funciones de VESTA!');
 });
 
 // * ENDPOINT JSON DE LAS IMAGENES SUBIDAS (PUBLICO)
