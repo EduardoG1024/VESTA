@@ -30,4 +30,7 @@
 
 ![Diagram Logic](/design/Diagram.png)
 
+## IMPORTANT PATHS
+- VESTA has multiple endpoints but there are some endpoints more important than others. why? because this endpoints are connected to the database.
+
 

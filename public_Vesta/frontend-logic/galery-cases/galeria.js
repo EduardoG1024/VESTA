@@ -14,7 +14,7 @@ async function galeriaVesta() {
     const url = `/galeriaVesta/${id}`;
     const res = await fetch(url);
     const images = await res.json();
-    // console.log(images); // ARRAY DE OBJETOS
+    console.log(images); // ARRAY DE OBJETOS
     
     // CONTENEDOR DE IMAGENES
     images.forEach(img => {

@@ -11,6 +11,7 @@ import { onlyImagesVideosVesta } from './src/vesta-modulos/onlyImages.js';
 import { supabase } from './src/vesta-modulos/vestabase.js';
 import { limiter } from './src/vesta-modulos/vestaLimiter.js';
 import { validateLoginVesta } from './src/endpoints-middlewares/vesta-login.js';
+import { generatePosterVesta } from './vesta-posters/vesta-ffmpeg.js';
 
 
 // * PUERTO Y EXPRESS
@@ -40,7 +41,8 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const VestaTitle = 'Vesta';
-        return cb(null, VestaTitle + '-' + file.originalname);
+        const fileOriginalReplaced = file.originalname.replaceAll(' ', '-');
+        return cb(null, VestaTitle + '-' + fileOriginalReplaced);
     }
 });
 const upload = multer({storage,
@@ -123,6 +125,14 @@ app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req
 
     if (!usuario || !titulo || !req.file) return res.send('Debes Llenar Todos los Campos Solicitados');
 
+    // ? POSTER
+    if (req.file.mimetype == 'video/mp4') {
+        const videoPath = `./uploads/${ruta}`;
+        // console.log(videoPath);
+        generatePosterVesta(videoPath, ruta);
+    }
+
+    // ? DATABASE
     const { error } = await supabase
     .from('VESTA_DB_LINKS')
     .insert({
