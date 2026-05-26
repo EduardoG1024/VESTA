@@ -18,7 +18,7 @@ async function galeriaVesta() {
     
     // CONTENEDOR DE IMAGENES
     images.forEach(img => {
-        if (img.link_stored.endsWith('.png') || img.link_stored.endsWith('.jpg') || img.link_stored.endsWith('.jpeg') || img.link_stored.endsWith('.webp')) {
+        if (img.link_stored.endsWith('.png') || img.link_stored.endsWith('.jpg') || img.link_stored.endsWith('.jpeg')) {
                 const picContainer = document.createElement('div');
                 picContainer.className = 'image-container-galery';
                 picContainer.innerHTML = `
@@ -26,15 +26,7 @@ async function galeriaVesta() {
                         <button class="btn-save-image">Guardar</button>
                         `;
                 containerGaleriaVesta.appendChild(picContainer);
-            } else {
-                const picContainer = document.createElement('div');
-                picContainer.className = 'image-container-galery';
-                picContainer.innerHTML = `
-                        <video src="${img.link_stored}" class="imageGalery" preload="metadata" loading="lazy"></video>
-                        <button class="btn-save-image">Guardar</button>
-                        `;
-                containerGaleriaVesta.appendChild(picContainer);
-            }
+            } 
         });
 
     // EVENTO CLICK ABRIR IMAGEN
@@ -42,6 +34,7 @@ async function galeriaVesta() {
         imageClick.forEach(btn => {
             btn.addEventListener('click', (event) => {
                 // console.log(event.target.src);
+                // ? REDIRIGIR DEPENDIENDO DEL MIMETYPE
                 window.location.href = `${event.target.src}`;
             });
         });

@@ -59,19 +59,14 @@ const upload = multer({storage,
 // * PAGINA PRINCIPAL (MAIN PAGE)
 // TODO: AÑADIR PAGINA PRINCIPAL FRONTEND
 app.get('/', (req, res) => {
-    if (req.session.views) {
-        req.session.views++;
-    } else {
-        req.session.views = 1;
-    }
-    res.send(`Views: ${req.session.views}`);
-    //res.send('VESTA main page');
+    // MAIN PAGE VESTA
+    // PAGE FOR BANNER, LOGIN BTN, MAIN BTN
 });
 
 // * RUTA DEL FORMULARIO DE REGISTRO
 // TODO: AÑADIR PAGINA DE FORMULARIO FRONTEND
 app.get('/registroVesta', (req, res) => {
-    
+    res.redirect('/login.html');
 });
 
 // * ENDPOINT PARA RECIBIR DATOS DEL LOGIN
@@ -84,6 +79,13 @@ app.post('/loginVesta', limiter, (req, res, next) => {
     const { email: correo, password: contraseña } = req.body;
     if (!validateLoginVesta(correo, contraseña))
         return res.status(400).send('Datos no Validados');
+
+    // ? PRODUCCION
+    const { data, error } = await supabase.auth.signUp({
+        email: correo,
+        password: contraseña,
+    });
+    if (error) return res.status(400).send('Ocurrio un Error al Crear tu Cuenta, Intentalo mas Tarde');
     
     return res.status(200).send('Datos Validados ya Puedes Utilizar todas las Funciones de VESTA!');
 });
@@ -146,8 +148,10 @@ app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req
         link_date: fecha,
     });
     if (error) return res.status(500).send('Lo Sentimos, No se Pudo Guardar tu Imagen, Intentalo de Nuevo');
+
     const urlImagen = `http://localhost:3001/${ruta}`;
     const postImage = `http://localhost:3001/${poster}`;
+    
     res.status(200).send(`Tu Imagen ha Sido Guardada, Visita: ${urlImagen}, y el poster es: ${postImage}`);
     next();
 });
@@ -165,5 +169,5 @@ app.get('/test', async (req, res) => {
 // * ENCENDIDO DEL SERVIDOR
 app.listen(port, () => {
     console.log(`Servidor Vesta Escuchando en el Puerto: ${port}`);
-    console.log(`http://localhost:${port}/formulario.html`);
+    console.log(`visita: http://localhost:${port}/formulario.html`);
 });
