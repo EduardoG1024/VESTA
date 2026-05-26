@@ -128,13 +128,12 @@ app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req
     if (!usuario || !titulo || !req.file) return res.send('Debes Llenar Todos los Campos Solicitados');
 
     // ? POSTER
+    let poster
     if (req.file.mimetype == 'video/mp4') {
         const videoPath = `./uploads/${ruta}`;
-        console.log(videoPath);
-        generatePosterVesta(videoPath, ruta);
+        // ? EJECUTAR & ASIGNAR VALOR
+        poster = generatePosterVesta(videoPath, ruta);
     }
-    const post = `Poster-${ruta}`;
-    const poster = post.replace('.mp4', '.webp');
 
     // ? DATABASE
     const { error } = await supabase
@@ -147,8 +146,9 @@ app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req
         link_date: fecha,
     });
     if (error) return res.status(500).send('Lo Sentimos, No se Pudo Guardar tu Imagen, Intentalo de Nuevo');
-    const urlImagen = `http://vesta.site/${ruta}`;
-    res.status(200).send(`Tu Imagen ha Sido Guardada, Visita: ${urlImagen}`);
+    const urlImagen = `http://localhost:3001/${ruta}`;
+    const postImage = `http://localhost:3001/${poster}`;
+    res.status(200).send(`Tu Imagen ha Sido Guardada, Visita: ${urlImagen}, y el poster es: ${postImage}`);
     next();
 });
 

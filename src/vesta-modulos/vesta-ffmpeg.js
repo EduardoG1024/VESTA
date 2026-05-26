@@ -10,14 +10,9 @@ const postersPath = path.join(__dirname, '..', '..', 'posters');
 // ? videoPath DEBE DE SER => "../uploads/${Nombre-del-Video.mp4}"
 export const generatePosterVesta = (videoPath, ruta) => {
 
-    console.log('-------------------------');
-    console.log(postersPath);
-
     // ? EDITABLE
     const NewtestName = ruta.replace('.mp4', '.webp')
     const fileNamePoster = `Poster-${NewtestName}`;
-    console.log('-------------------------');
-    console.log(NewtestName, fileNamePoster);
 
     ffmpeg(videoPath)
         .screenshots({
@@ -31,4 +26,7 @@ export const generatePosterVesta = (videoPath, ruta) => {
         .on('error', (err) => {
             // console.error(`Ocurrió un Error con: ${videoPath}, `, err);
         });
+        
+        // ? RETURN DE LA RUTA DEL POSTER
+        return fileNamePoster;
 }
