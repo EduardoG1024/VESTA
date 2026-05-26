@@ -7,36 +7,44 @@ const fileExt = [
     '.webp',
 ]
 
-async function galeriaVesta() {
+export async function galeriaVesta(idBtn) {
 
     // TRAER IMAGENES AL FRONTEND
-    const id = 1;
+    const id = idBtn;
     const url = `/galeriaVesta/${id}`;
     const res = await fetch(url);
-    const images = await res.json();
-    console.log(images); // ARRAY DE OBJETOS
-    
+    const files = await res.json();
+    console.log(files);
+
+    // ARRAY DE OBJETOS
+    // ? link_user:     NOMBRE DE USUARIO
+    // ? link_title:    NOMBRE DE IMAGEN
+    // ? link_stored:   RUTA DEL FILE
+    // ? link_poster:   RUTA DEL POSTER(FILE)
+
+
     // CONTENEDOR DE IMAGENES
-    images.forEach(img => {
-        if (img.link_stored.endsWith('.png') || img.link_stored.endsWith('.jpg') || img.link_stored.endsWith('.jpeg')) {
+    files.forEach(file => {
+        if (file.link_stored.endsWith('.png') || file.link_stored.endsWith('.jpg') || file.link_stored.endsWith('.jpeg')) {
                 const picContainer = document.createElement('div');
                 picContainer.className = 'image-container-galery';
                 picContainer.innerHTML = `
-                        <img src="${img.link_stored}" class="imageGalery" loadind="lazy" alt="VestaImage">
+                        <img src="${file.link_stored}" class="imageGalery" loadind="lazy" alt="VestaImage">
+                        <p>${file.link_title}</p>
                         <button class="btn-save-image">Guardar</button>
                         `;
                 containerGaleriaVesta.appendChild(picContainer);
             } 
         });
 
-    // EVENTO CLICK ABRIR IMAGEN
-        const imageClick = document.querySelectorAll('.imageGalery');
-        imageClick.forEach(btn => {
-            btn.addEventListener('click', (event) => {
-                // console.log(event.target.src);
-                // ? REDIRIGIR DEPENDIENDO DEL MIMETYPE
-                window.location.href = `${event.target.src}`;
-            });
-        });
+    // // EVENTO CLICK ABRIR IMAGEN
+    //     const imageClick = document.querySelectorAll('.imageGalery');
+    //     imageClick.forEach(btn => {
+    //         btn.addEventListener('click', (event) => {
+    //             // console.log(event.target.src);
+    //             // ? REDIRIGIR DEPENDIENDO DEL MIMETYPE
+    //             window.location.href = `${event.target.src}`;
+    //         });
+    //     });
 }
-galeriaVesta();
+// galeriaVesta();

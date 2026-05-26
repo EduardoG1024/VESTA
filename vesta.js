@@ -74,7 +74,7 @@ app.get('/registroVesta', (req, res) => {
 // ? 1. RECIBIR DATOS DE USUARIO
 // ? 2. VALIDAR LOS DATOS DEL USUARIO CON MIDDLEWARE
 // ? 3. ENVIAR DATOS VALIDADOS A AUTH SUPABASE
-app.post('/loginVesta', limiter, (req, res, next) => {
+app.post('/loginVesta', limiter, async (req, res, next) => {
     // console.log(req.body);
     const { email: correo, password: contraseña } = req.body;
     if (!validateLoginVesta(correo, contraseña))
@@ -95,14 +95,14 @@ app.post('/loginVesta', limiter, (req, res, next) => {
 // TODO: PAGINACION DE ARCHIVOS / RECUPERAR LINKS DE SUPABASE
 app.get('/galeriaVesta/:id', async (req, res) => {
     const page = parseInt(req.params.id) || 1; // PAGINA
-    const limit = 12;             // LIMITE
+    const limit = 12;                          // LIMITE
 
-    const from = (page - 1) * 10;
+    const from = (page - 1) * limit;
     const to = from + limit - 1;
     // console.log(nameImage);
     const { data, error } = await supabase
     .from('VESTA_DB_LINKS')
-    .select('id, link_user, link_title, link_stored, link_date')
+    .select('id, link_user, link_title, link_stored, link_date, link_poster')
     // .gt('id', 31) 
     .order('id', {ascending: false})
     .range(from, to)
@@ -151,7 +151,7 @@ app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req
 
     const urlImagen = `http://localhost:3001/${ruta}`;
     const postImage = `http://localhost:3001/${poster}`;
-    
+
     res.status(200).send(`Tu Imagen ha Sido Guardada, Visita: ${urlImagen}, y el poster es: ${postImage}`);
     next();
 });
