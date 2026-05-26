@@ -10,8 +10,8 @@ import fs from 'fs';
 import { onlyImagesVideosVesta } from './src/vesta-modulos/onlyImages.js';
 import { supabase } from './src/vesta-modulos/vestabase.js';
 import { limiter } from './src/vesta-modulos/vestaLimiter.js';
-import { validateLoginVesta } from './src/endpoints-middlewares/vesta-login.js';
-import { generatePosterVesta } from './vesta-posters/vesta-ffmpeg.js';
+import { validateLoginVesta } from './src/vesta-middlewares/vesta-login.js';
+import { generatePosterVesta } from './src/vesta-modulos/vesta-ffmpeg.js';
 
 
 // * PUERTO Y EXPRESS
@@ -117,7 +117,7 @@ app.get('/subirImagenVesta', (req, res) => {
 // TODO: ENVIAR RUTAS DE ARCHIVOS A SUPABASE
 app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req, res, next) => {
     
-    // DEFINIR DATOS
+    // ? DEFINIR DATOS
     const usuario = req.body.VestaUsuario;
     const titulo = req.body.VestaTitle;
     const ruta = req.file.filename;
@@ -128,7 +128,7 @@ app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req
     // ? POSTER
     if (req.file.mimetype == 'video/mp4') {
         const videoPath = `./uploads/${ruta}`;
-        // console.log(videoPath);
+        console.log(videoPath);
         generatePosterVesta(videoPath, ruta);
     }
 
@@ -160,4 +160,5 @@ app.get('/test', async (req, res) => {
 // * ENCENDIDO DEL SERVIDOR
 app.listen(port, () => {
     console.log(`Servidor Vesta Escuchando en el Puerto: ${port}`);
+    console.log(`http://localhost:${port}/formulario.html`);
 });

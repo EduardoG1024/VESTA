@@ -26,7 +26,7 @@
     - **Hosting**
     - Ubuntu Server / PM2 / Cloudflare Tunnel
 
-- VESTA Arquitecture
+- VESTA Architecture
 
 ![Diagram Logic](/design/Diagram.png)
 
