@@ -33,6 +33,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname, 'public_Vesta')));
 app.use(express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname, 'posters')));
+
 
 // * MULTER CONFIGURACION
 const storage = multer.diskStorage({
@@ -131,6 +133,8 @@ app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req
         console.log(videoPath);
         generatePosterVesta(videoPath, ruta);
     }
+    const post = `Poster-${ruta}`;
+    const poster = post.replace('.mp4', '.webp');
 
     // ? DATABASE
     const { error } = await supabase
@@ -139,6 +143,7 @@ app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req
         link_user: usuario,
         link_title: titulo,
         link_stored: ruta,
+        link_poster: poster,
         link_date: fecha,
     });
     if (error) return res.status(500).send('Lo Sentimos, No se Pudo Guardar tu Imagen, Intentalo de Nuevo');
