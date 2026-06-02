@@ -1,7 +1,7 @@
 // * RUTA "/loginVesta"
 // ? VALIDAR DATOS RECIBIDOS DEL USUARIO
 
-const LengthLimit = 150;
+const LengthLimit = 200;
 
 export function validateLoginVesta(correo, contraseña) {
     console.log('_________________________________')

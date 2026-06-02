@@ -6,19 +6,19 @@ import session from 'express-session';
 import path from 'path';
 import fs from 'fs';
 
-// * IMPORTAR FUNCIONES EXTERNAS (EDITABLES)
-import { onlyImagesVideosVesta } from './src/vesta-modulos/onlyImages.js';
-import { supabase } from './src/vesta-modulos/vestabase.js';
-import { limiter } from './src/vesta-modulos/vestaLimiter.js';
+// IMPORTAR FUNCIONES EXTERNAS (EDITABLES)
+import { onlyImagesVideosVesta } from './src/vesta-middlewares/onlyImages.js';
+import { supabase } from './src/vesta-config/vestabase.js';
+import { limiter } from './src/vesta-middlewares/vestaLimiter.js';
 import { validateLoginVesta } from './src/vesta-middlewares/vesta-login.js';
 import { generatePosterVesta } from './src/vesta-modulos/vesta-ffmpeg.js';
 
 
-// * PUERTO Y EXPRESS
+// PUERTO Y EXPRESS
 const port = process.env.PORT;
 const app = express();
 
-// * SESSION PARA USUARIOS
+// SESSION PARA USUARIOS
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -26,7 +26,7 @@ app.use(session({
     cookie: {secure: false},
 }));
  
-// * USO DE CARPETAS Y URL's
+// USO DE CARPETAS Y URL's
 const __dirname = import.meta.dirname;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'posters')));
 
 
-// * MULTER CONFIGURACION
+// MULTER CONFIGURACION
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads');
@@ -56,24 +56,24 @@ const upload = multer({storage,
     }
 });
 
-// * PAGINA PRINCIPAL (MAIN PAGE)
-// TODO: AÑADIR PAGINA PRINCIPAL FRONTEND
+// PAGINA PRINCIPAL (MAIN PAGE)
+// AÑADIR PAGINA PRINCIPAL FRONTEND
 app.get('/', (req, res) => {
     // MAIN PAGE VESTA
     // PAGE FOR BANNER, LOGIN BTN, MAIN BTN
 });
 
-// * RUTA DEL FORMULARIO DE REGISTRO
-// TODO: AÑADIR PAGINA DE FORMULARIO FRONTEND
+// RUTA DEL FORMULARIO DE REGISTRO
+// AÑADIR PAGINA DE FORMULARIO FRONTEND
 app.get('/registroVesta', (req, res) => {
     res.redirect('/login.html');
 });
 
-// * ENDPOINT PARA RECIBIR DATOS DEL LOGIN
-// TODO: CREAR MIDDLEWARE CON:
-// ? 1. RECIBIR DATOS DE USUARIO
-// ? 2. VALIDAR LOS DATOS DEL USUARIO CON MIDDLEWARE
-// ? 3. ENVIAR DATOS VALIDADOS A AUTH SUPABASE
+// ENDPOINT PARA RECIBIR DATOS DEL LOGIN
+// CREAR MIDDLEWARE CON:
+// 1. RECIBIR DATOS DE USUARIO
+// 2. VALIDAR LOS DATOS DEL USUARIO CON MIDDLEWARE
+// 3. ENVIAR DATOS VALIDADOS A AUTH SUPABASE
 app.post('/loginVesta', limiter, async (req, res, next) => {
     // console.log(req.body);
     const { email: correo, password: contraseña } = req.body;
@@ -90,9 +90,9 @@ app.post('/loginVesta', limiter, async (req, res, next) => {
     return res.status(200).send('Datos Validados ya Puedes Utilizar todas las Funciones de VESTA!');
 });
 
-// * ENDPOINT JSON DE LAS IMAGENES SUBIDAS (PUBLICO)
+// ENDPOINT JSON DE LAS IMAGENES SUBIDAS (PUBLICO)
 // LECTURA DEL DIRECTORIO DE UPLOADS (IMAGENES)
-// TODO: PAGINACION DE ARCHIVOS / RECUPERAR LINKS DE SUPABASE
+// PAGINACION DE ARCHIVOS / RECUPERAR LINKS DE SUPABASE
 app.get('/galeriaVesta/:id', async (req, res) => {
     const page = parseInt(req.params.id) || 1; // PAGINA
     const limit = 12;                          // LIMITE
@@ -110,15 +110,15 @@ app.get('/galeriaVesta/:id', async (req, res) => {
     res.json(data);
 });
 
-// * RUTA DEL FORMULARIO PARA SUBIR IMAGENES FRONTEND
+// RUTA DEL FORMULARIO PARA SUBIR IMAGENES FRONTEND
 app.get('/subirImagenVesta', (req, res) => {
     res.redirect('/formulario.html')
 });
 
-// * ENDPOINT PARA RECIBIR FORMULARIO CON IMAGENES
-// ! IMPORTANTE: SOLO RECIBIR IMAGENES, CREAR MIDDLEWARES PARA VALIDAR DATOS
-// TODO: MIDDLEWARES DE VERIFICACION
-// TODO: ENVIAR RUTAS DE ARCHIVOS A SUPABASE
+// ENDPOINT PARA RECIBIR FORMULARIO CON IMAGENES
+// IMPORTANTE: SOLO RECIBIR IMAGENES, CREAR MIDDLEWARES PARA VALIDAR DATOS
+// MIDDLEWARES DE VERIFICACION
+// ENVIAR RUTAS DE ARCHIVOS A SUPABASE
 app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req, res, next) => {
     
     // ? DEFINIR DATOS
@@ -156,7 +156,7 @@ app.post('/recibirImagenVesta', limiter, upload.single('VestaImage'), async (req
     next();
 });
 
-// ? ENDPOINT TEST
+// ENDPOINT TEST
 app.get('/test', async (req, res) => {
     const { data, error } = await supabase
     .from('VESTA_DB_LINKS')
@@ -166,7 +166,7 @@ app.get('/test', async (req, res) => {
     res.json(data);
 });
 
-// * ENCENDIDO DEL SERVIDOR
+// ENCENDIDO DEL SERVIDOR
 app.listen(port, () => {
     console.log(`Servidor Vesta Escuchando en el Puerto: ${port}`);
     console.log(`visita: http://localhost:${port}/formulario.html`);

@@ -17,7 +17,7 @@
 
 ## TECHNICAL DOCUMENTATION
 - VESTA is a web application developed with:
-    - **FronEnd**
+    - **FrontEnd**
     - HTML / CSS / JavaScript
     - **BackEnd**
     - NodeJs / Express / Multer / Express-Session / Express-Rate-Limit

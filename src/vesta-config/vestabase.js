@@ -1,4 +1,4 @@
-// ? CLIENTE DE SUPABASE
+// CLIENTE DE SUPABASE
 import { createClient } from '@supabase/supabase-js';
 
 export const supabase = createClient(
